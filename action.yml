@@ -1,6 +1,15 @@
 name: 'Build Quasar Android'
 description: Action to build 
 inputs:
+  repository-path: 
+    description: The repository path (ex. user/repository)
+    required: true
+  repository-ref:
+    description: The reference to check out the required repository version (ex master)
+    required: false
+  repository-token: 
+    description: The repository token (in case of a private repository)
+    required: false
   version-code: 
     description: The version code of the application (optional)
     required: false
@@ -13,6 +22,10 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v2
+      with:
+        repository: ${{ inputs.repository-path }}
+        ref: ${{ inputs.repository-ref }}
+        token: ${{ inputs.repository-token }}    
     - name: Install Node.js dependency
       uses: actions/setup-node@v1
       with:
