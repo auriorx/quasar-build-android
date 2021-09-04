@@ -37,6 +37,6 @@ runs:
       shell: bash
     - name: Upload APK
       uses: actions/upload-artifact@v1
-        with:
-          name: quasar-build-android
-          path: ./dist/cordova/android/bundle/release
+      with:
+        name: quasar-build-android
+        path: ./dist/cordova/android/bundle/release
