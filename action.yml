@@ -1,6 +1,12 @@
 name: 'Build Quasar Android'
 description: Action to build 
 inputs:
+  search-values: 
+    description: Search values to find and replace with replace-values (~ is the delimiter)
+    required: false
+  replace-values: 
+    description: Replace values to replace the search-values with (~ is the delimiter)
+    required: false
   version-code: 
     description: The version code of the application (optional)
     required: false
@@ -13,6 +19,14 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v2
+    - name: Replacements
+      run: |
+        IFS=';' read -ra SEARCH <<< "${{ inputs.search-values }}"
+        IFS=';' read -ra REPLACE <<< "${{ inputs.replace-values }}"
+        for index in ${!SEARCH[*]}; do 
+          echo "Replacing ${SEARCH[$index]} with ${REPLACE[$index]}"                        
+          grep -rl ${SEARCH[$index]} ./ | xargs sed -i s~${SEARCH[$index]}~${REPLACE[$index]}~g
+        done
     - name: Install Node.js dependency
       uses: actions/setup-node@v1
       with:
