@@ -35,3 +35,8 @@ runs:
     - name: Quasar build
       run: sudo npx quasar build -m cordova -T android --release
       shell: bash
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+        with:
+          name: quasar-build-android$GITHUB_SHA
+          path: ./dist/cordova/android/bundle/release
