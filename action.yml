@@ -27,6 +27,7 @@ runs:
           echo "Replacing ${SEARCH[$index]} with ${REPLACE[$index]}"                        
           grep -rl ${SEARCH[$index]} ./ | xargs sed -i s~${SEARCH[$index]}~${REPLACE[$index]}~g
         done
+      shell: bash
     - name: Install Node.js dependency
       uses: actions/setup-node@v1
       with:
