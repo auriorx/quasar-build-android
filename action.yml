@@ -12,10 +12,11 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v2
     - name: Install Node.js dependency
       uses: actions/setup-node@v1
       with:
-        node-version: "10.x"
+        node-version: "10.x"    
     - name: Install NPM
       run: sudo npm install --unsafe-perm=true --allow-root
       shell: bash
