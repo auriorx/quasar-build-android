@@ -1,0 +1,31 @@
+name: 'Build Quasar Android'
+description: Action to build 
+inputs:
+  version-code: 
+    description: The version code of the application (optional)
+    required: false
+outputs: 
+  build-output:
+    description: "The build output"
+    value: ${{ steps.build-quasar-android.outputs.build-output }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Node.js dependency
+      uses: actions/setup-node@v1
+      with:
+        node-version: "10.x"
+    - name: Install NPM
+      run: sudo npm install --unsafe-perm=true --allow-root
+    - name: Install Quasar CLI        
+      run: sudo npm install -g @quasar/cli
+    - name: Install cordova
+      run: sudo npm install -g cordova
+    - name: Update Java settings for cordova
+      run: |
+        sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac 100 &&
+        sudo update-alternatives --set javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac &&
+        sudo update-alternatives --config javac
+    - name: Quasar build
+      run: sudo npx quasar build -m cordova -T android --release
