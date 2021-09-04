@@ -18,14 +18,19 @@ runs:
         node-version: "10.x"
     - name: Install NPM
       run: sudo npm install --unsafe-perm=true --allow-root
+      shell: bash
     - name: Install Quasar CLI        
       run: sudo npm install -g @quasar/cli
+      shell: bash
     - name: Install cordova
       run: sudo npm install -g cordova
+      shell: bash
     - name: Update Java settings for cordova
       run: |
         sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac 100 &&
         sudo update-alternatives --set javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac &&
         sudo update-alternatives --config javac
+      shell: bash
     - name: Quasar build
       run: sudo npx quasar build -m cordova -T android --release
+      shell: bash
