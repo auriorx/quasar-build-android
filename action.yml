@@ -21,8 +21,8 @@ runs:
     - uses: actions/checkout@v2
     - name: Replacements
       run: |
-        IFS=';' read -ra SEARCH <<< "${{ inputs.search-values }}"
-        IFS=';' read -ra REPLACE <<< "${{ inputs.replace-values }}"
+        IFS='~' read -ra SEARCH <<< "${{ inputs.search-values }}"
+        IFS='~' read -ra REPLACE <<< "${{ inputs.replace-values }}"
         for index in ${!SEARCH[*]}; do 
           echo "Replacing ${SEARCH[$index]} with ${REPLACE[$index]}"                        
           grep -rl ${SEARCH[$index]} ./ | xargs sed -i s~${SEARCH[$index]}~${REPLACE[$index]}~g
