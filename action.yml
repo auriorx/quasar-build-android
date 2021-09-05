@@ -40,6 +40,7 @@ runs:
       shell: bash
     - name: Quasar build for Android
       run: sudo npx quasar build -m cordova -T android --release
+      shell: bash
     - name: Upload APK for Android
       uses: actions/upload-artifact@v1      
       with:
