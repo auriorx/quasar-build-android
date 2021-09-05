@@ -7,10 +7,6 @@ inputs:
   replace-values: 
     description: Replace values to replace the search-values with (~ is the delimiter)
     required: false
-outputs: 
-  build-output:
-    description: "The build output"
-    value: ${{ steps.build-quasar-android.outputs.build-output }}
 
 runs:
   using: "composite"
