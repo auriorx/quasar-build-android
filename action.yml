@@ -7,9 +7,6 @@ inputs:
   replace-values: 
     description: Replace values to replace the search-values with (~ is the delimiter)
     required: false
-  version-code: 
-    description: The version code of the application (optional)
-    required: false
 outputs: 
   build-output:
     description: "The build output"
