@@ -7,7 +7,8 @@ inputs:
   replace-values: 
     description: Replace values to replace the search-values with (~ is the delimiter)
     required: false
-
+  mode:
+    description: Mode to run Quasar build with (Android, iOS, Electron or Web (default))    
 runs:
   using: "composite"
   steps:
@@ -21,30 +22,42 @@ runs:
           grep -rl ${SEARCH[$index]} ./ | xargs sed -i s~${SEARCH[$index]}~${REPLACE[$index]}~g
         done
       shell: bash
-    - name: Install Node.js dependency
+    - name: Install global requirements (android + iOS + web)
       uses: actions/setup-node@v1
       with:
         node-version: "10.x"    
-    - name: Install NPM
-      run: sudo npm install --unsafe-perm=true --allow-root
+    - name: Install global requirements (android + iOS + web)
+      run: |
+        sudo npm install --unsafe-perm=true --allow-root &&
+        sudo npm install -g @quasar/cli        
       shell: bash
-    - name: Install Quasar CLI        
-      run: sudo npm install -g @quasar/cli
-      shell: bash
-    - name: Install cordova
+    - name: Install cordova (android + iOS)
+      if: ${{ inputs.mode == 'Android' || inputs.mode == 'iOS' }}
       run: sudo npm install -g cordova
       shell: bash
     - name: Update Java settings for cordova
+      if: ${{ inputs.mode == 'Android' }}
       run: |
         sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac 100 &&
         sudo update-alternatives --set javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac &&
         sudo update-alternatives --config javac
       shell: bash
-    - name: Quasar build
+    - name: Quasar build for Android
+      if: ${{ inputs.mode == 'Android' }}
       run: sudo npx quasar build -m cordova -T android --release
+    - name: Quasar build for Web
+      if: ${{ inputs.mode != 'Android' && inputs.mode != 'iOS' && inputs.mode != 'Electron' }}
+      run: sudo npx quasar build
       shell: bash
-    - name: Upload APK
+    - name: Upload APK for Android
       uses: actions/upload-artifact@v1
+      if: ${{ inputs.mode == 'Android' }}
       with:
         name: quasar-build-android
         path: ./dist/cordova/android/bundle/release
+    - name: Upload APK for Web
+      uses: actions/upload-artifact@v1
+      if: ${{ inputs.mode != 'Android' && inputs.mode != 'iOS' && inputs.mode != 'Electron' }}
+      with:
+        name: quasar-build-web
+        path: ./dist/spa
