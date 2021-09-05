@@ -39,7 +39,6 @@ runs:
         sudo update-alternatives --config javac
       shell: bash
     - name: Quasar build for Android
-      if: ${{ inputs.mode == 'Android' }}
       run: sudo npx quasar build -m cordova -T android --release
     - name: Upload APK for Android
       uses: actions/upload-artifact@v1      
